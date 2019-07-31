@@ -19,6 +19,7 @@ jobs:
           architecture: 'x64'
       - task: CacheBeta@0
         inputs:
+          key: download
           path: $(DOWNLOAD_DIR)
         displayName: Download cache
       - script: |
