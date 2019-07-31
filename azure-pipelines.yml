@@ -3,10 +3,6 @@ jobs:
     timeoutInMinutes: 90
     strategy:
       matrix:
-        vs2015-x86-win2012:
-          vmImage: vs2015-win2012r2
-          VS_VER: "14"
-          PLATFORM: "x86"
         vs2017-x86-win2016:
           vmImage: vs2017-win2016
           VS_VER: "15"
@@ -20,5 +16,8 @@ jobs:
         inputs:
           versionSpec: '3.7'
           architecture: 'x64'
+      - script: |
+          choco install msys2 --params="/NoPath"
+        displayName: Install MSYS2
       - script: |
           python.exe build.py build --archives-download-dir=%DOWNLOAD_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --enable-gi --py-wheel --py-egg --python-ver 3.7 enchant gtk gtk3-full pycairo pygobject lz4
