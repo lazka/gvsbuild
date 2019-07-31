@@ -23,6 +23,7 @@ jobs:
           path: $(DOWNLOAD_DIR)
         displayName: Download cache
       - script: |
+          choco config set cacheLocation %DOWNLOAD_DIR%
           choco install msys2 --params="/InstallDir:%MSYS2_ROOT% /NoPath"
         displayName: Install MSYS2
       - script: |
