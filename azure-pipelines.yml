@@ -1,19 +1,24 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+jobs:
+  - job: win32
+    timeoutInMinutes: 90
+    strategy:
+      matrix:
+        vs2015-x86-win2012:
+          vmImage: vs2015-win2012r2
+          VS_VER: "14"
+          PLATFORM: "x86"
+        vs2017-x86-win2016:
+          vmImage: vs2017-win2016
+          VS_VER: "15"
+          PLATFORM: "x86"
+    pool:
+      vmImage: $(vmImage)
+    variables:
+      DOWNLOAD_DIR: _download_cache
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.7'
+          architecture: 'x64'
+      - script: |
+        python.exe build.py build --archives-download-dir=%DOWNLOAD_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --enable-gi --py-wheel --py-egg --python-ver 3.7 enchant gtk gtk3-full pycairo pygobject lz4
