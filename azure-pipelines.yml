@@ -10,14 +10,15 @@ jobs:
     pool:
       vmImage: $(vmImage)
     variables:
-      DOWNLOAD_DIR: _download_cache
+      DOWNLOAD_DIR: $(System.Workfolder)\_download_cache
+      MSYS2_ROOT: $(System.Workfolder)\msys64
     steps:
       - task: UsePythonVersion@0
         inputs:
           versionSpec: '3.7'
           architecture: 'x64'
       - script: |
-          choco install msys2 --params="/InstallDir:C:\msys64 /NoPath"
+          choco install msys2 --params="/InstallDir:%MSYS2_ROOT% /NoPath"
         displayName: Install MSYS2
       - script: |
-          python.exe build.py build --archives-download-dir=%DOWNLOAD_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --enable-gi --py-wheel --py-egg --python-ver 3.7 enchant gtk gtk3-full pycairo pygobject lz4
+          python.exe build.py build --msys-dir=%MSYS2_ROOT% --archives-download-dir=%DOWNLOAD_DIR% --platform=%PLATFORM% --vs-ver=%VS_VER% -k --enable-gi --py-wheel --py-egg --python-ver 3.7 enchant gtk gtk3-full pycairo pygobject lz4
