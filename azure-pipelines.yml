@@ -17,6 +17,10 @@ jobs:
         inputs:
           versionSpec: '3.7'
           architecture: 'x64'
+      - task: CacheBeta@0
+        inputs:
+          path: $(DOWNLOAD_DIR)
+        displayName: Download cache
       - script: |
           choco install msys2 --params="/InstallDir:%MSYS2_ROOT% /NoPath"
         displayName: Install MSYS2
